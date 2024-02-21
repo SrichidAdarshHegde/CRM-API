@@ -129,7 +129,6 @@ namespace FPL.Api.Controllers
             {
                 throw e;
             }
-
         }
 
         [HttpGet]
