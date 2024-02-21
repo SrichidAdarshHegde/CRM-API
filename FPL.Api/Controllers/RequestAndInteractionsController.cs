@@ -1046,18 +1046,14 @@ namespace FPL.Api.Controllers
             {
                 string requestforresult = "";
                 string requestsandsresult = "";
-                List<ContactData> cccc = new List<ContactData>();
 
                 var Requests = db.Table_RequestsFormData.Where(c => c.IsMachineDeleted != true).ToList();
                 var datalist = new List<allrequestdatamodel>();
 
                 for (var i = 0; i < Requests.Count; i++)
                 {
-                    if (i == 0)
-                    {
-                        int memnerID = Convert.ToInt32(Requests[i].MachineNumber);
-                        GetContactList(memnerID);
-                    }
+                    int memnerID = Convert.ToInt32(Requests[i].MachineNumber);
+                    GetContactList(memnerID);
                     var mn = Requests[i].MachineNumber;
 
                     var cid = Requests[i].CustomerId;
@@ -1066,13 +1062,12 @@ namespace FPL.Api.Controllers
 
                     var MachineData = await Task.Run(() => db.Table_MachineRegistration.Where(c => c.MachineNumber == mn).Select(c => c).FirstOrDefault());
                     var CompanyData = await Task.Run(() => db.Table_CustomerRegistartion.Where(c => c.CustomerID == cid).Select(c => c).FirstOrDefault());
-                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.MachineId == mn).Select(c => c).ToList());
+                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.MachineNumber == mn).Select(ConvertToContactData).ToList());
                     var requestfordata = await Task.Run(() => db.Table_MachineCustomerRequestsDetails.Where(c => c.UniqueID == uniquerequestfor).Select(c => c.RequestFor).ToList());
 
                     var sanddsdata = await Task.Run(() => db.Table_MachineCustomerSansSDetails.Where(c => c.UniqueID == uniquesands).Select(c => c.SandS).ToList());
 
                     for (int r = 0; r < requestfordata.Count; r++)
-
                     {
                         if (r == 0)
                         {
@@ -1082,7 +1077,6 @@ namespace FPL.Api.Controllers
                         {
                             requestforresult = requestforresult + " , " + requestfordata[r];
                         }
-
                     }
 
                     for (int s = 0; s < sanddsdata.Count; s++)
@@ -1095,7 +1089,6 @@ namespace FPL.Api.Controllers
                         {
                             requestsandsresult = requestsandsresult + " , " + requestfordata[s];
                         }
-
                     }
 
                     allrequestdatamodel data = new allrequestdatamodel()
@@ -1106,35 +1099,43 @@ namespace FPL.Api.Controllers
                         Remarks = Requests[i].Remarks,
                         Region = CompanyData.Region,
                         Zone = CompanyData.Zone,
-                        // ContactData = contact,
+                        ContactData = CuntactDataData,
                         CreatedBy = Requests[i].CreatedBy,
                         CreatedOn = Requests[i].CreatedOn,
                         IsDone = Requests[i].IsDone,
                         RequestId = Requests[i].id,
                         RequestFor = requestforresult,
                         SandS = requestsandsresult
-
                     };
                     datalist.Add(data);
                 }
 
                 MyResponse response = new MyResponse
                 {
-                    Array1 = datalist,
-                    Array2 = contact
+                    Array1 = datalist
+                    // Array2 is not needed if you only want to return Array1
                 };
 
-                return Ok(response);
-                // return Ok(datalist);
+                return Ok(response.Array1);
             }
             catch (Exception e)
             {
-
                 throw e;
             }
-
         }
 
+        private ContactData ConvertToContactData(Table_Contactdetails contactDetails)
+        {
+            return new ContactData
+            {
+                Salute = contactDetails.Salute,
+                ContactName = contactDetails.ContactName,
+                Mobile = contactDetails.Mobile,
+                Email = contactDetails.Email,
+                Designation = contactDetails.Designation,
+
+            };
+        }
 
         [HttpGet]
         public async Task<IHttpActionResult> GetMachineRequestsFromMachineNumber([FromUri(Name = "id")] int id)
