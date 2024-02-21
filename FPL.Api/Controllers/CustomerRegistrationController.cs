@@ -127,7 +127,6 @@ namespace FPL.Api.Controllers
             }
             catch (Exception e)
             {
-
                 throw e;
             }
 
