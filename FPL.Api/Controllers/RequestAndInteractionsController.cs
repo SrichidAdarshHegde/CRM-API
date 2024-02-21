@@ -1113,7 +1113,6 @@ namespace FPL.Api.Controllers
                 MyResponse response = new MyResponse
                 {
                     Array1 = datalist
-                    // Array2 is not needed if you only want to return Array1
                 };
 
                 return Ok(response.Array1);
