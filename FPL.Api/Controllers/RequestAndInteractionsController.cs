@@ -1062,7 +1062,7 @@ namespace FPL.Api.Controllers
 
                     var MachineData = await Task.Run(() => db.Table_MachineRegistration.Where(c => c.MachineNumber == mn).Select(c => c).FirstOrDefault());
                     var CompanyData = await Task.Run(() => db.Table_CustomerRegistartion.Where(c => c.CustomerID == cid).Select(c => c).FirstOrDefault());
-                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.MachineNumber == mn).Select(ConvertToContactData).ToList());
+                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.CustomerId == cid).Select(ConvertToContactData).ToList());
                     var requestfordata = await Task.Run(() => db.Table_MachineCustomerRequestsDetails.Where(c => c.UniqueID == uniquerequestfor).Select(c => c.RequestFor).ToList());
 
                     var sanddsdata = await Task.Run(() => db.Table_MachineCustomerSansSDetails.Where(c => c.UniqueID == uniquesands).Select(c => c.SandS).ToList());
@@ -1160,7 +1160,7 @@ namespace FPL.Api.Controllers
 
                     var MachineData = await Task.Run(() => db.Table_MachineRegistration.Where(c => c.MachineNumber == mn).Select(c => c).FirstOrDefault());
                     var CompanyData = await Task.Run(() => db.Table_CustomerRegistartion.Where(c => c.CustomerID == cid).Select(c => c).FirstOrDefault());
-                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.MachineId == mn).Select(c => c).ToList());
+                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.CustomerId == cid).Select(ConvertToContactData).ToList());
 
                     var requestfordata = await Task.Run(() => db.Table_MachineCustomerRequestsDetails.Where(c => c.UniqueID == uniquerequestfor).Select(c => c).ToList());
 
@@ -1201,7 +1201,7 @@ namespace FPL.Api.Controllers
                         Remarks = Requests[i].Remarks,
                         Region = CompanyData.Region,
                         Zone = CompanyData.Zone,
-                        // ContactData = contact,
+                        ContactData = CuntactDataData,
                         CreatedBy = Requests[i].CreatedBy,
                         CreatedOn = Requests[i].CreatedOn,
                         IsDone = Requests[i].IsDone,
@@ -1214,18 +1214,28 @@ namespace FPL.Api.Controllers
 
                 MyResponse response = new MyResponse
                 {
-                    Array1 = datalist,
-                    Array2 = contact
+                    Array1 = datalist
                 };
 
-                return Ok(response);
-                // return Ok(datalist);
+                return Ok(response.Array1);
             }
             catch (Exception e)
             {
-
                 throw e;
             }
+        }
+
+        private ContactData ConvertToContactDatamachine(Table_Contactdetails contactDetails)
+        {
+            return new ContactData
+            {
+                Salute = contactDetails.Salute,
+                ContactName = contactDetails.ContactName,
+                Mobile = contactDetails.Mobile,
+                Email = contactDetails.Email,
+                Designation = contactDetails.Designation,
+
+            };
         }
 
         [HttpGet]
@@ -1242,13 +1252,13 @@ namespace FPL.Api.Controllers
 
                 for (var i = 0; i < Requests.Count; i++)
                 {
-                    if (i == 0)
-                    {
-                        int memnerID = Convert.ToInt32(Requests[i].MachineNumber);
-                        GetContactList(memnerID);
-                    }
+                    //if (i == 0)
+                    //{
+                    //    int memnerID = Convert.ToInt32(Requests[i].MachineNumber);
+                    //    GetContactList(memnerID);
+                    //}
                     var mn = Requests[i].MachineNumber;
-
+                    var cid = Requests[i].CustomerId;
                     var uniquerequestfor = Requests[i].RequestFor;
                     var uniquesands = Requests[i].SandS;
 
@@ -1256,7 +1266,7 @@ namespace FPL.Api.Controllers
 
                     var MachineData = await Task.Run(() => db.Table_MachineRegistration.Where(c => c.MachineNumber == mn).Select(c => c).FirstOrDefault());
                     var CompanyData = await Task.Run(() => db.Table_CustomerRegistartion.Where(c => c.CustomerID == memberIDD).Select(c => c).FirstOrDefault());
-                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.MachineId == mn).Select(c => c).ToList());
+                    var CuntactDataData = await Task.Run(() => db.Table_Contactdetails.Where(c => c.CustomerId == cid).Select(ConvertToContactData).ToList());
                     var requestfordata = await Task.Run(() => db.Table_MachineCustomerRequestsDetails.Where(c => c.UniqueID == uniquerequestfor).Select(c => c).ToList());
 
                     var sanddsdata = await Task.Run(() => db.Table_MachineCustomerSansSDetails.Where(c => c.UniqueID == uniquesands).Select(c => c).ToList());
@@ -1295,7 +1305,7 @@ namespace FPL.Api.Controllers
                         Remarks = Requests[i].Remarks,
                         Region = CompanyData.Region,
                         Zone = CompanyData.Zone,
-                        // ContactData = contact,
+                        ContactData = CuntactDataData,
                         CreatedBy = Requests[i].CreatedBy,
                         CreatedOn = Requests[i].CreatedOn,
                         IsDone = Requests[i].IsDone,
@@ -1308,18 +1318,28 @@ namespace FPL.Api.Controllers
 
                 MyResponse response = new MyResponse
                 {
-                    Array1 = datalist,
-                    Array2 = contact
+                    Array1 = datalist
                 };
 
-                return Ok(response);
-                // return Ok(datalist);
+                return Ok(response.Array1);
             }
             catch (Exception e)
             {
-
                 throw e;
             }
+        }
+
+        private ContactData ConvertToContactDatacustomer(Table_Contactdetails contactDetails)
+        {
+            return new ContactData
+            {
+                Salute = contactDetails.Salute,
+                ContactName = contactDetails.ContactName,
+                Mobile = contactDetails.Mobile,
+                Email = contactDetails.Email,
+                Designation = contactDetails.Designation,
+
+            };
         }
         public class MyResponse
         {
@@ -1394,6 +1414,7 @@ namespace FPL.Api.Controllers
             public Nullable<bool> IsDone { get; set; }
             public Nullable<int> TokenID { get; set; }
 
+            
         }
 
         [HttpGet]

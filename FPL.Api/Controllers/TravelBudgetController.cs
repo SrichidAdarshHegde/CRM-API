@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -159,7 +160,48 @@ namespace FPL.Api.Controllers
             }
         }
 
-        [HttpGet]
+
+
+        [HttpPost]
+
+        public IHttpActionResult PostUpdateTripSheetData([FromBody] TripSheetDataVM updatedData)
+        {
+            try
+            {
+                using (var dbContext = new YourDbContext())
+                {
+                    var existingTripSheet = dbContext.TripSheetDatas.FirstOrDefault(t => t.TripSheetNo == updatedData.TripSheetNo);
+                    if (existingTripSheet != null)
+                    {
+                        // Update the properties with the new values
+                        existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+
+                        existingTripSheet.SparesReqd = updatedData.SparesReqd;
+                        dbContext.SaveChanges();
+
+                        return Ok("success");
+                    }
+
+                    return NotFound(); // Or BadRequest("Invalid Trip Sheet Number");
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log or handle the DbUpdateException
+                Console.WriteLine($"DbUpdateException: {ex.Message}");
+                return InternalServerError(ex);
+            }
+
+
+
+        }
+
+
+
+
+
+
+            [HttpGet]
         public async Task<IHttpActionResult> GetTripDetailsbyTripSheetNo([FromUri(Name = "id")] int id)
         {
             var tripData = await Task.Run(() => db.Table_TravelBudget.Where(c => c.TripSheetNo == id).Select(c => c).ToList());
@@ -299,6 +341,67 @@ namespace FPL.Api.Controllers
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> UserId { get; set; }
+    }
+    public class YourDbContext : DbContext
+    {
+        public int id { get; set; }
+        //public List<ArrayDataVM> TripSheetValues { get; set; }
+        public List<ArrayDataVM> TripSheetValues { get; set; }
+        public DbSet<TripSheetData> TripSheetDatas { get; set; }
+        public Nullable<int> TripSheetNo { get; set; }
+        public Nullable<bool> IsDone { get; set; }
+        public Nullable<int> TotalEstDistKms { get; set; }
+        public Nullable<System.TimeSpan> TotalEstTravelTime { get; set; }
+        public Nullable<System.TimeSpan> TotalFoodFuel { get; set; }
+        public Nullable<System.TimeSpan> TotalEstJobTime { get; set; }
+        public Nullable<System.TimeSpan> TotalSchdET { get; set; }
+        public Nullable<int> MileageCNG { get; set; }
+        public Nullable<int> MileagePetrol { get; set; }
+        public Nullable<int> MileageDiesel { get; set; }
+        public Nullable<decimal> FuelPriceCNG { get; set; }
+        public Nullable<decimal> FuelPricePetrol { get; set; }
+        public Nullable<decimal> FuelPriceDiesel { get; set; }
+        public Nullable<decimal> FuelPriceReqd { get; set; }
+        public Nullable<decimal> FuelReqd { get; set; }
+        public string SparesReqd { get; set; }
+        public string Vehicle { get; set; }
+        public string StartPlace { get; set; }
+        public string StartCluster { get; set; }
+        public string EndPlace { get; set; }
+        public string EndCluster { get; set; }
+
+        public Nullable<System.TimeSpan> InitialTime { get; set; }
+        public string CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+        public Nullable<int> UserId { get; set; }
+    }
+
+   
+
+    public class TripSheetData
+    {
+        public int TripSheetNo { get; set; }
+        public decimal FuelPriceCNG { get; set; }
+        public decimal FuelPricePetrol { get; set; }
+        public decimal FuelPriceDiesel { get; set; }
+        public decimal FuelPriceReqd { get; set; }
+        public string FuelReqd { get; set; }
+        public DateTime InitialTime { get; set; }
+        public decimal MileageCNG { get; set; }
+        public decimal MileagePetrol { get; set; }
+        public decimal MileageDiesel { get; set; }
+        public string SparesReqd { get; set; }
+        public string StartCluster { get; set; }
+        public string StartPlace { get; set; }
+        public string EndCluster { get; set; }
+        public string EndPlace { get; set; }
+        public string Vehicle { get; set; }
+        public decimal TotalEstDistKms { get; set; }
+        public string TotalEstJobTime { get; set; }
+        public string TotalEstTravelTime { get; set; }
+        public string TotalFoodFuel { get; set; }
+        public string TotalSchdET { get; set; }
+        public int UserId { get; set; }
     }
 
     public partial class TravelBudgetDetails
