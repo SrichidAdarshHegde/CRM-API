@@ -161,47 +161,182 @@ namespace FPL.Api.Controllers
         }
 
 
-
         [HttpPost]
-
-        public IHttpActionResult PostUpdateTripSheetData([FromBody] TripSheetDataVM updatedData)
+        public async Task<IHttpActionResult> PostUpdateTripSheetData([FromBody] TripSheetDataVM updatedData)
         {
             try
             {
-                using (var dbContext = new YourDbContext())
+                //using (var db = new YourDbContext()) // Replace YourDbContext with the actual name of your database context class
+                //{
+                var existingTripSheet = db.Table_TravelBudget.FirstOrDefault(t => t.TripSheetNo == updatedData.TripSheetNo);
+
+                if (existingTripSheet != null)
                 {
-                    var existingTripSheet = dbContext.TripSheetDatas.FirstOrDefault(t => t.TripSheetNo == updatedData.TripSheetNo);
-                    if (existingTripSheet != null)
+                    // Update the properties with the new values
+                    //                existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                    existingTripSheet.SparesReqd = updatedData.SparesReqd;
+
+                    existingTripSheet.SparesReqd = updatedData.SparesReqd;
+
+                    existingTripSheet.FuelPricePetrol = (decimal)updatedData.FuelPricePetrol;
+                    existingTripSheet.EndCluster = updatedData.EndCluster;
+
+                    existingTripSheet.FuelPricePetrol = (decimal)updatedData.FuelPricePetrol;
+                    existingTripSheet.EndPlace = updatedData.EndPlace;
+
+                    //            existingTripSheet.FuelPriceDiesel = (decimal)updatedData.FuelPriceDiesel;
+                    existingTripSheet.StartCluster = updatedData.StartCluster;
+
+                    existingTripSheet.FuelPriceReqd = (decimal)updatedData.FuelPriceReqd;
+                    existingTripSheet.StartPlace = updatedData.StartPlace;
+
+                    existingTripSheet.FuelReqd = (decimal)updatedData.FuelReqd;
+                    existingTripSheet.Vehicle = updatedData.Vehicle;
+
+                    //           existingTripSheet.MileageCNG = updatedData.MileageCNG;
+                    existingTripSheet.MileagePetrol = updatedData.MileagePetrol;
+                    existingTripSheet.MileageDiesel = updatedData.MileageDiesel;
+
+
+
+                    existingTripSheet.TotalEstJobTime = updatedData.TotalEstJobTime;
+                    existingTripSheet.TotalEstDistKms = updatedData.TotalEstDistKms;
+
+                    existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                    existingTripSheet.TotalEstTravelTime = updatedData.TotalEstTravelTime;
+
+                    //           existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                    existingTripSheet.TotalFoodFuel = updatedData.TotalFoodFuel;
+
+                    //           existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                    existingTripSheet.TotalSchdET = updatedData.TotalSchdET;
+
+                    existingTripSheet.InitialTime = updatedData.InitialTime;
+
+
+
+
+                    foreach (var arrayDataVM in updatedData.TripSheetValues)
                     {
-                        // Update the properties with the new values
-                        existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                        var existingArrayData = db.Table_TravelBudget.FirstOrDefault(e => e.id == arrayDataVM.id);
+                        if (existingArrayData != null)
+                        {
+                            // Update existingArrayData properties with new values
+                            existingArrayData.MachineNumber = arrayDataVM.MachineNumber;
+                            existingArrayData.CompanyName = arrayDataVM.CompanyName;
+                            existingArrayData.CustomerId = arrayDataVM.CustomerId;
 
-                        existingTripSheet.SparesReqd = updatedData.SparesReqd;
-                        dbContext.SaveChanges();
+                            existingArrayData.Purpose = arrayDataVM.Purpose;
+                            existingArrayData.Cluster = arrayDataVM.Cluster;
 
-                        return Ok("success");
+                            existingArrayData.ModelId = arrayDataVM.ModelId;
+                            existingArrayData.ModelName = arrayDataVM.ModelName;
+                            existingArrayData.Remarks = arrayDataVM.Remarks;
+                            existingArrayData.RequestForId = arrayDataVM.RequestForId;
+                            existingArrayData.TicketId = arrayDataVM.TicketId;
+                            existingArrayData.Zone = arrayDataVM.Zone;
+
+                            existingArrayData.EstDistanceKms = arrayDataVM.EstDistanceKms;
+                            existingArrayData.EstTravelTime = arrayDataVM.EstTravelTime;
+                            existingArrayData.FoodFuelOthers = arrayDataVM.FoodFuelOthers;
+                            existingArrayData.EstJobTime = arrayDataVM.EstJobTime;
+                            existingArrayData.SchdET = arrayDataVM.SchdET;
+
+                            existingArrayData.SparesReqd = arrayDataVM.SparesReqd;
+                            existingArrayData.InitialTime = arrayDataVM.InitialTime;
+                            existingArrayData.TotalSchdET = arrayDataVM.TotalSchdET;
+                            existingArrayData.TotalFoodFuel = arrayDataVM.TotalFoodFuel;
+                            existingArrayData.TotalEstTravelTime = arrayDataVM.TotalEstTravelTime;
+
+
+                            existingArrayData.Vehicle = arrayDataVM.Vehicle;
+                            existingArrayData.StartCluster = arrayDataVM.StartCluster;
+                            existingArrayData.StartPlace = arrayDataVM.StartPlace;
+                            existingArrayData.EndPlace = arrayDataVM.EndPlace;
+                            existingArrayData.EndCluster = arrayDataVM.EndCluster;
+
+
+
+
+
+                        }
+                        else
+                        {
+                            // Create a new entity if not found
+                            var newArrayDataEntity = new Table_TravelBudget
+                            {
+                                // Populate properties from arrayDataVM
+                                TripSheetNo = updatedData.TripSheetNo,
+                                id = arrayDataVM.id, // Replace with the actual unique identifier
+                                MachineNumber = arrayDataVM.MachineNumber,
+                                CompanyName = arrayDataVM.CompanyName,
+                                CustomerId = arrayDataVM.CustomerId,
+                                Purpose = arrayDataVM.Purpose,
+                                Cluster = arrayDataVM.Cluster,
+                                ModelId = arrayDataVM.ModelId,
+                                ModelName = arrayDataVM.ModelName,
+                                Remarks = arrayDataVM.Remarks,
+                                RequestForId = arrayDataVM.RequestForId,
+                                TicketId = arrayDataVM.TicketId,
+                                Zone = arrayDataVM.Zone,
+                                EstDistanceKms = arrayDataVM.EstDistanceKms,
+                                EstTravelTime = arrayDataVM.EstTravelTime,
+                                FoodFuelOthers = arrayDataVM.FoodFuelOthers,
+                                EstJobTime = arrayDataVM.EstJobTime,
+                                SchdET = arrayDataVM.SchdET,
+
+
+                                TotalEstDistKms = arrayDataVM.TotalEstDistKms,
+                                TotalEstTravelTime = arrayDataVM.TotalEstTravelTime,
+                                TotalFoodFuel = arrayDataVM.TotalFoodFuel,
+                                TotalEstJobTime = arrayDataVM.TotalEstJobTime,
+                                TotalSchdET = arrayDataVM.TotalSchdET,
+                                MileageCNG = arrayDataVM.MileageCNG,
+                                MileagePetrol = arrayDataVM.MileagePetrol,
+                                MileageDiesel = arrayDataVM.MileageDiesel,
+                                FuelPriceCNG = arrayDataVM.FuelPriceCNG,
+                                FuelPricePetrol = arrayDataVM.FuelPricePetrol,
+                                FuelPriceDiesel = arrayDataVM.FuelPriceDiesel,
+                                FuelPriceReqd = arrayDataVM.FuelPriceReqd,
+                                FuelReqd = arrayDataVM.FuelReqd,
+                                SparesReqd = arrayDataVM.SparesReqd,
+                                Vehicle = arrayDataVM.Vehicle,
+                                StartPlace = arrayDataVM.StartPlace,
+                                StartCluster = arrayDataVM.StartCluster,
+                                EndPlace = arrayDataVM.EndPlace,
+                                EndCluster = arrayDataVM.EndCluster,
+                                InitialTime = arrayDataVM.InitialTime,
+
+                                // ... (populate other properties)
+                            };
+                            db.Table_TravelBudget.Add(newArrayDataEntity);
+                        }
                     }
 
-                    return NotFound(); // Or BadRequest("Invalid Trip Sheet Number");
+
+
+
+                    await Task.Run(() => db.Entry(existingTripSheet).State = EntityState.Modified);
+                    // Save changes to the database
+                    await db.SaveChangesAsync();
+
                 }
-            }
-            catch (DbUpdateException ex)
+                    return Ok("success");
+                }
+
+            
+            
+            catch (Exception e)
             {
-                // Log or handle the DbUpdateException
-                Console.WriteLine($"DbUpdateException: {ex.Message}");
-                return InternalServerError(ex);
+                throw e;
             }
-
-
-
         }
 
 
 
 
 
-
-            [HttpGet]
+        [HttpGet]
         public async Task<IHttpActionResult> GetTripDetailsbyTripSheetNo([FromUri(Name = "id")] int id)
         {
             var tripData = await Task.Run(() => db.Table_TravelBudget.Where(c => c.TripSheetNo == id).Select(c => c).ToList());
@@ -266,8 +401,8 @@ namespace FPL.Api.Controllers
     public partial class TripSheetDataVM
     {
         public int id { get; set; }
-        //public List<ArrayDataVM> TripSheetValues { get; set; }
         public List<ArrayDataVM> TripSheetValues { get; set; }
+        //public List<ArrayDataVM> TripSheetValues { get; set; }
         public Nullable<int> TripSheetNo { get; set; }
         public Nullable<bool> IsDone { get; set; }
         public Nullable<int> TotalEstDistKms { get; set; }
