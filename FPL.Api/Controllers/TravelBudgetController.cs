@@ -168,53 +168,53 @@ namespace FPL.Api.Controllers
             {
                 //using (var db = new YourDbContext()) // Replace YourDbContext with the actual name of your database context class
                 //{
-                var existingTripSheet = db.Table_TravelBudget.FirstOrDefault(t => t.TripSheetNo == updatedData.TripSheetNo);
+                //var existingTripSheet = db.Table_TravelBudget.FirstOrDefault(t => t.TripSheetNo == updatedData.TripSheetNo);
 
-                if (existingTripSheet != null)
-                {
-                    // Update the properties with the new values
-                    //                existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
-                    existingTripSheet.SparesReqd = updatedData.SparesReqd;
+                //if (existingTripSheet != null)
+                //{
+                //    // Update the properties with the new values
+                //    //                existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                //    existingTripSheet.SparesReqd = updatedData.SparesReqd;
 
-                    existingTripSheet.SparesReqd = updatedData.SparesReqd;
+                //    existingTripSheet.SparesReqd = updatedData.SparesReqd;
 
-                    existingTripSheet.FuelPricePetrol = (decimal)updatedData.FuelPricePetrol;
-                    existingTripSheet.EndCluster = updatedData.EndCluster;
+                //    existingTripSheet.FuelPricePetrol = (decimal)updatedData.FuelPricePetrol;
+                //    existingTripSheet.EndCluster = updatedData.EndCluster;
 
-                    existingTripSheet.FuelPricePetrol = (decimal)updatedData.FuelPricePetrol;
-                    existingTripSheet.EndPlace = updatedData.EndPlace;
+                //    existingTripSheet.FuelPricePetrol = (decimal)updatedData.FuelPricePetrol;
+                //    existingTripSheet.EndPlace = updatedData.EndPlace;
 
-                    //            existingTripSheet.FuelPriceDiesel = (decimal)updatedData.FuelPriceDiesel;
-                    existingTripSheet.StartCluster = updatedData.StartCluster;
+                //    //            existingTripSheet.FuelPriceDiesel = (decimal)updatedData.FuelPriceDiesel;
+                //    existingTripSheet.StartCluster = updatedData.StartCluster;
 
-                    existingTripSheet.FuelPriceReqd = (decimal)updatedData.FuelPriceReqd;
-                    existingTripSheet.StartPlace = updatedData.StartPlace;
+                //    existingTripSheet.FuelPriceReqd = (decimal)updatedData.FuelPriceReqd;
+                //    existingTripSheet.StartPlace = updatedData.StartPlace;
 
-                    existingTripSheet.FuelReqd = (decimal)updatedData.FuelReqd;
-                    existingTripSheet.Vehicle = updatedData.Vehicle;
+                //    existingTripSheet.FuelReqd = (decimal)updatedData.FuelReqd;
+                //    existingTripSheet.Vehicle = updatedData.Vehicle;
 
-                    //           existingTripSheet.MileageCNG = updatedData.MileageCNG;
-                    existingTripSheet.MileagePetrol = updatedData.MileagePetrol;
-                    existingTripSheet.MileageDiesel = updatedData.MileageDiesel;
-
-
-
-                    existingTripSheet.TotalEstJobTime = updatedData.TotalEstJobTime;
-                    existingTripSheet.TotalEstDistKms = updatedData.TotalEstDistKms;
-
-                    existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
-                    existingTripSheet.TotalEstTravelTime = updatedData.TotalEstTravelTime;
-
-                    //           existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
-                    existingTripSheet.TotalFoodFuel = updatedData.TotalFoodFuel;
-
-                    //           existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
-                    existingTripSheet.TotalSchdET = updatedData.TotalSchdET;
-
-                    existingTripSheet.InitialTime = updatedData.InitialTime;
+                //    //           existingTripSheet.MileageCNG = updatedData.MileageCNG;
+                //    existingTripSheet.MileagePetrol = updatedData.MileagePetrol;
+                //    existingTripSheet.MileageDiesel = updatedData.MileageDiesel;
 
 
 
+                //    existingTripSheet.TotalEstJobTime = updatedData.TotalEstJobTime;
+                //    existingTripSheet.TotalEstDistKms = updatedData.TotalEstDistKms;
+
+                //    existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                //    existingTripSheet.TotalEstTravelTime = updatedData.TotalEstTravelTime;
+
+                //    //           existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                //    existingTripSheet.TotalFoodFuel = updatedData.TotalFoodFuel;
+
+                //    //           existingTripSheet.FuelPriceCNG = (decimal)updatedData.FuelPriceCNG;
+                //    existingTripSheet.TotalSchdET = updatedData.TotalSchdET;
+
+                //    existingTripSheet.InitialTime = updatedData.InitialTime;
+
+
+                
 
                     foreach (var arrayDataVM in updatedData.TripSheetValues)
                     {
@@ -242,25 +242,39 @@ namespace FPL.Api.Controllers
                             existingArrayData.EstJobTime = arrayDataVM.EstJobTime;
                             existingArrayData.SchdET = arrayDataVM.SchdET;
 
-                            existingArrayData.SparesReqd = arrayDataVM.SparesReqd;
-                            existingArrayData.InitialTime = arrayDataVM.InitialTime;
-                            existingArrayData.TotalSchdET = arrayDataVM.TotalSchdET;
-                            existingArrayData.TotalFoodFuel = arrayDataVM.TotalFoodFuel;
-                            existingArrayData.TotalEstTravelTime = arrayDataVM.TotalEstTravelTime;
+                            existingArrayData.SparesReqd = updatedData.SparesReqd;
+                            existingArrayData.InitialTime = updatedData.InitialTime;
+                            existingArrayData.TotalSchdET = updatedData.TotalSchdET;
+                            existingArrayData.TotalFoodFuel = updatedData.TotalFoodFuel;
+                            existingArrayData.TotalEstTravelTime = updatedData.TotalEstTravelTime;
 
 
-                            existingArrayData.Vehicle = arrayDataVM.Vehicle;
-                            existingArrayData.StartCluster = arrayDataVM.StartCluster;
-                            existingArrayData.StartPlace = arrayDataVM.StartPlace;
-                            existingArrayData.EndPlace = arrayDataVM.EndPlace;
-                            existingArrayData.EndCluster = arrayDataVM.EndCluster;
+                            existingArrayData.Vehicle = updatedData.Vehicle;
+                            existingArrayData.StartCluster = updatedData.StartCluster;
+                            existingArrayData.StartPlace = updatedData.StartPlace;
+                            existingArrayData.EndPlace = updatedData.EndPlace;
+                            existingArrayData.EndCluster = updatedData.EndCluster;
+
+                        existingArrayData.FuelReqd = updatedData.FuelReqd;
+                        existingArrayData.FuelPriceCNG = updatedData.FuelPriceCNG;
+                        existingArrayData.FuelPricePetrol = updatedData.FuelPricePetrol;
+                        existingArrayData.FuelPriceDiesel = updatedData.FuelPriceDiesel;
+                        existingArrayData.FuelPriceReqd = updatedData.FuelPriceReqd;
+
+
+                        existingArrayData.MileageCNG = updatedData.MileageCNG;
+                        existingArrayData.MileagePetrol = updatedData.MileagePetrol;
+                        existingArrayData.MileageDiesel = updatedData.MileageDiesel;
+                        existingArrayData.TotalEstDistKms = updatedData.TotalEstDistKms;
+                        
+                        existingArrayData.CreatedBy = updatedData.CreatedBy;
+                        existingArrayData.CreatedOn = DateTime.Now;
 
 
 
 
-
-                        }
-                        else
+                    }
+                    else
                         {
                             // Create a new entity if not found
                             var newArrayDataEntity = new Table_TravelBudget
@@ -311,17 +325,18 @@ namespace FPL.Api.Controllers
                             };
                             db.Table_TravelBudget.Add(newArrayDataEntity);
                         }
-                    }
-
-
-
-
-                    await Task.Run(() => db.Entry(existingTripSheet).State = EntityState.Modified);
+                    await Task.Run(() => db.Entry(existingArrayData).State = EntityState.Modified);
                     // Save changes to the database
                     await db.SaveChangesAsync();
 
+
                 }
-                    return Ok("success");
+
+
+
+
+
+                return Ok("success");
                 }
 
             
