@@ -1053,7 +1053,7 @@ namespace FPL.Api.Controllers
                 for (var i = 0; i < Requests.Count; i++)
                 {
                     int memnerID = Convert.ToInt32(Requests[i].MachineNumber);
-                    GetContactList(memnerID);
+                   // GetContactList(memnerID);
                     var mn = Requests[i].MachineNumber;
 
                     var cid = Requests[i].CustomerId;
