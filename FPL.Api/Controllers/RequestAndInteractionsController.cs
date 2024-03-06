@@ -435,7 +435,7 @@ namespace FPL.Api.Controllers
 
                     var companyData = await db.Table_CustomerRegistartion.Where(c => c.CustomerID == request.CustomerId).FirstOrDefaultAsync();
 
-                    var contactData = await db.Table_Contactdetails.Where(c => c.MachineId == request.MachineNumber) .Select(c => new ContactData
+                    var contactData = await db.Table_Contactdetails.Where(c => c.CustomerId == request.CustomerId) .Select(c => new ContactData
                         {
                             ContactName = c.ContactName,
                             Designation = c.Designation,
