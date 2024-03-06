@@ -172,7 +172,8 @@ namespace FPL.Api.Controllers
             for (int i = 0; i < machinedata.Count; i++)
             {
                 var mn = machinedata[i].MachineNumber;
-                var ticketData = await Task.Run(() => db.Table_RequestsFormData.Where(c => c.MachineNumber == mn && c.CustomerId == customerData.CustomerID && c.IsDone != true).OrderByDescending(c => c.TokenID).FirstOrDefault());
+                    var customerId = machinedata[i].CustomerId;
+                var ticketData = await Task.Run(() => db.Table_RequestsFormData.Where(c => c.MachineNumber == mn && c.CustomerId == customerId && c.IsDone != true).OrderByDescending(c => c.TokenID).FirstOrDefault());
 
                 MachineTicketDataVM data = new MachineTicketDataVM()
                 {
